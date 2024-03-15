@@ -1,0 +1,42 @@
+﻿Program.Sub.Preflight.Start
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+V.Local.sSQL.Declare
+V.Local.sSO.Declare
+V.Local.sWO.Declare
+V.Local.sSuffix.Declare
+V.Local.sUserField.Declare
+
+F.ODBC.Connection!con.OpenCompanyConnection
+
+F.Intrinsic.Control.If(V.Caller.Hook,=,17261)
+	V.Local.sSO.Set(V.Passed.009002)
+	V.Local.sWO.Set(V.Passed.009000)
+	V.Local.sSuffix.Set(V.Passed.009001)
+	
+	F.Intrinsic.String.Build("SELECT USER_1 FROM V_ORDER_HEADER WHERE ORDER_NO = '{0}'",V.Local.sSO,v.Local.sSQL)
+	F.ODBC.Connection!con.ExecuteAndReturn(V.Local.sSQL,v.Local.sUserField)
+
+	F.Intrinsic.String.Build("UPDATE JOB_HEADER SET COMMENTs_1 = '{0}' WHERE JOB = '{1}' AND SUFFIX = '{2}'",V.Local.sUserField.Trim,V.Local.sWO,V.Local.sSuffix,v.Local.sSQL)
+	F.ODBC.Connection!con.Execute(v.Local.sSQL)
+
+F.Intrinsic.Control.ElseIf(V.Caller.Hook,=,16630)
+	V.Local.sSO.Set(V.Passed.ORDER-NO)
+	V.Local.sWO.Set(V.Passed.000003)
+	V.Local.sSuffix.Set(V.Passed.000004)
+	
+	F.Intrinsic.String.Build("SELECT USER_1 FROM V_ORDER_HEADER WHERE ORDER_NO = '{0}'",V.Local.sSO,v.Local.sSQL)
+	F.ODBC.Connection!con.ExecuteAndReturn(V.Local.sSQL,v.Local.sUserField)
+	
+	V.Passed.000033.Set(v.Local.sUserField.Trim)
+F.Intrinsic.Control.EndIf
+
+F.ODBC.Connection!con.Close
+
+Program.Sub.Main.End
+
+Program.Sub.Comments.Start
+${$5$}$3.0.0.0$}$1
+${$6$}$dyunus$}$20200529224327497$}$xZ6SHi8g7O0Qsxe6AiO2NH3PnOKQRy0Tf0WxUhZrrzrM0/fSlrdgLs7C1DxE8emnWlZXWbzUaBk=
+Program.Sub.Comments.End
